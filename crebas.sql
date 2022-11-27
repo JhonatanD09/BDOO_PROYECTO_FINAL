@@ -27,7 +27,7 @@ TABLESPACE "USERS";
 --Creacion de la tabla zap_tall_col
 CREATE TABLE ZAP_TALL_COL (
    id_zapato NUMBER(11) ,
-   talla NUMBER(2,2),
+   talla NUMBER(3,1),
    color  VARCHAR2(20),  
    min_stock NUMBER(5),
    precio NUMBER(11)
