@@ -8,37 +8,34 @@ CREATE OR REPLACE PACKAGE p_facturas IS
 -- * Consultar total por vendedor en un rango
 
     PROCEDURE create_facture (
-        id_factura IN facturas.id_factura%TYPE,
-        NOMBRE_CLIENTE IN  facturas.NOMBRE_CLIENTE%TYPE,
-        TOTAL IN facturas.TOTAL%TYPE,
-        FECHA_VENTA IN facturas.FECHA_VENTA%TYPE,
-        USUARIO IN facturas.USUARIO%TYPE
+    CLIENTE IN  facturas.NOMBRE_CLIENTE%TYPE,
+    USUARIOO IN facturas.USUARIO%TYPE
     );
 
     PROCEDURE show_factures;
     
     procedure delete_facture(
-     id_factura IN facturas.id_factura%TYPE
+     idFact IN facturas.id_factura%TYPE
     );
     
-     procedure update_facture(
-     id_factura IN facturas.id_factura%TYPE,
-     NOMBRE_CLIENTE IN  facturas.NOMBRE_CLIENTE%TYPE
+     procedure update_facture_name(
+     p_id_factura IN facturas.id_factura%TYPE,
+     p_NOMBRE_CLI IN  facturas.NOMBRE_CLIENTE%TYPE
     );
     
-     procedure update_facture(
-     id_factura IN facturas.id_factura%TYPE,
-     TOTAL IN facturas.TOTAL%TYPE
+     procedure update_facture_total(
+     p_id_factura IN facturas.id_factura%TYPE,
+     p_TOTAL IN facturas.TOTAL%TYPE
     );
     
-    procedure update_facture(
-    id_factura IN facturas.id_factura%TYPE,
-    FECHA_VENTA IN facturas.FECHA_VENTA%TYPE
+    procedure update_facture_date(
+    p_id_factura IN facturas.id_factura%TYPE,
+    p_FECHA_VENTA IN facturas.FECHA_VENTA%TYPE
     );
     
-    procedure update_facture(
-    id_factura IN facturas.id_factura%TYPE,
-    USUARIO IN facturas.FECHA_VENTA%TYPE
+    procedure update_facture_user(
+    p_id_factura IN facturas.id_factura%TYPE,
+    p_USUARIO IN facturas.USUARIO%TYPE
     );
     
     PROCEDURE calculate_total (
@@ -51,7 +48,7 @@ CREATE OR REPLACE PACKAGE p_facturas IS
     );
     
     PROCEDURE consult_by_user(
-        user IN facturas.USUARIO%TYPE
+       p_user IN facturas.USUARIO%TYPE
     );
     
     PROCEDURE consult_by_user_in_date(
