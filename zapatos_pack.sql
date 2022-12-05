@@ -1,7 +1,6 @@
 create or replace PACKAGE ZAPATOS_PACK AS 
 
     PROCEDURE agregar_zapato (
-        id_zapato    zapatos.ID%TYPE,
         marca  zapatos.marca%TYPE,
         modelo zapatos.modelo%TYPE,
         tipo    zapatos.tipo%TYPE,
@@ -33,7 +32,6 @@ END ZAPATOS_PACK;
 create or replace PACKAGE BODY zapatos_pack AS
 
     PROCEDURE agregar_zapato (
-        id_zapato    zapatos.ID%TYPE,
         marca  zapatos.marca%TYPE,
         modelo zapatos.modelo%TYPE,
         tipo    zapatos.tipo%TYPE,
