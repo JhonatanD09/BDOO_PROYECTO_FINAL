@@ -21,7 +21,6 @@ BEGIN
          INSERT INTO control_log VALUES (
            USER, SYSDATE, 'DETALLES','D'
         );
-
     END IF;
 
 END;
