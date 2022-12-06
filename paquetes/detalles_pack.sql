@@ -1,8 +1,9 @@
 create or replace PACKAGE DETALLES_PACK AS 
     
     PROCEDURE agregar_detalle(
-        id_factura NUMBER,
+        id_factura_n NUMBER,
         id_zap_tall_col_n NUMBER,
+        unidades_n NUMBER,
         descuento NUMBER
     );
     
@@ -30,48 +31,76 @@ END DETALLES_PACK;
 
 -----------------------------------------------------------
 
-CREATE OR REPLACE
-PACKAGE BODY DETALLES_PACK AS
+create or replace PACKAGE BODY DETALLES_PACK AS
 
   PROCEDURE agregar_detalle(
-        id_factura NUMBER,
+        id_factura_n NUMBER,
         id_zap_tall_col_n NUMBER,
+        unidades_n NUMBER,
         descuento NUMBER
+        
     ) AS
-  v_id_fac  facturas.id_factura%TYPE;
-   v_id_zap_tall_col zap_tall_col.id_zap_tall_col%TYPE;
+   v_id_fac  facturas.id_factura%TYPE := -1;
+   v_id_zap_tall_col zap_tall_col.id_zap_tall_col%TYPE := -1;
+   v_err NUMBER :=0;
+   v_min_stock NUMBER := 0;
+   v_stock NUMBER :=0;
+   no_stock EXCEPTION;
   BEGIN
+        
         BEGIN
-        --Se realiza la consulato coincidiendo con el codigo de factura ingresado
-            SELECT id_factura INTO v_id_fac 
-            FROM facturas
-            WHERE id_factura = id_factura;
-        EXCEPTION 
-        --Se controla la excepcion en caso de no encontrar valores
+        SELECT id_factura INTO v_id_fac 
+        FROM facturas
+        WHERE id_factura = id_factura_n;
+        EXCEPTION
             WHEN no_data_found THEN
-                dbms_output.put_line('No se encontro  codigo de factura');
+            dbms_output.put_line('No existe el id de la factura seleccionada');
+            v_err := 1;
         END;
+        
         BEGIN
         SELECT id_zap_tall_col INTO v_id_zap_tall_col
         FROM zap_tall_col
-        WHERE zap_tall_col.id_zap_tall_col = id_zap_tall_col_n;
+        WHERE id_zap_tall_col = id_zap_tall_col_n;
         EXCEPTION
-        --Se controla la excepcion en caso de no encontrar valores
             WHEN no_data_found THEN
-                dbms_output.put_line('No se encontro  codigo ');
+            dbms_output.put_line('No existe el id de zapatos talla color');
+            v_err := 1;
         END;
+        
+       
+            
+            
+        SELECT stock INTO v_stock FROM zap_tall_col 
+        WHERE id_zap_tall_col = id_zap_tall_col_n;
+        IF ((v_stock - unidades_n) < 0 )THEN
+            RAISE no_stock;
+        END IF;
         
         SELECT id_zap_tall_col INTO v_id_zap_tall_col
         FROM detalles
         WHERE id_zap_tall_col = id_zap_tall_col_n;
             dbms_output.put_line('Ya existe la linea que intenta agregar');
+        
         EXCEPTION
         --En esta excepcion se controla cuando no se encuentra un producto
-            WHEN no_data_found THEN
-            INSERT INTO detalles
-            VALUES(id_zap_tall_col_n,id_factura,descuento);
-            COMMIT;
-                dbms_output.put_line('Agregado');
+            WHEN no_data_found THEN  
+                IF  v_err = 0 THEN
+                    INSERT INTO detalles
+                    VALUES(id_zap_tall_col_n,id_factura_n,unidades_n,descuento);
+                    COMMIT;
+                    dbms_output.put_line('Agregado');
+                    SELECT min_stock INTO v_min_stock FROM zap_tall_col
+                    WHERE id_zap_tall_col = id_zap_tall_col_n;
+        
+                    IF (v_stock - unidades_n)< v_min_stock THEN
+                    dbms_output.put_line('Estas en el limite de capacidad, debes abastecer');
+                    END IF;
+                END IF;
+
+            WHEN no_stock THEN
+                dbms_output.put_line('No existen unidades suficentes para la venta');
+
   END agregar_detalle;
 
   PROCEDURE editar(
@@ -109,6 +138,11 @@ PACKAGE BODY DETALLES_PACK AS
                     WHEN 'LF' THEN
                        UPDATE detalles
                        SET id_zap_tall_col = dato
+                       WHERE detalles.id_factura= id_factura
+                       AND detalles.id_zap_tall_col = id_zap_tall_col_n;
+                    WHEN 'U' THEN
+                       UPDATE detalles
+                       SET unidades = dato
                        WHERE detalles.id_factura= id_factura
                        AND detalles.id_zap_tall_col = id_zap_tall_col_n;
                     ELSE

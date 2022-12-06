@@ -29,6 +29,7 @@ CREATE TABLE ZAP_TALL_COL (
    id_zapato NUMBER(11) ,
    talla NUMBER(3,1),
    color  VARCHAR2(20),  
+   stock  NUMBER(10),
    min_stock NUMBER(5),
    precio NUMBER(11)
 )
@@ -44,6 +45,7 @@ TABLESPACE "USERS";
 CREATE TABLE DETALLES (
    id_zap_tall_col NUMBER(11),
    id_factura NUMBER(11),
+   unidades   NUMBER(5),
    descuento  NUMBER(5,2)   
 )
 SEGMENT CREATION IMMEDIATE
