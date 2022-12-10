@@ -10,9 +10,9 @@ CREATE OR REPLACE PACKAGE BODY p_zap_tall_col IS
    -- );
 -- Se definen los procedimientos y funciones del paquete de acuerdo 
 -- a los requerimientos dados:
--- * creación
+-- * creaciï¿½n
 -- * borrado 
--- * edición para stock y precio
+-- * ediciï¿½n para stock y precio
 -- * Cantidad de stock
 -- * contultar Stock por marca y/o modelo
 -- * busqueda por marca, modelo, color y/o talla
@@ -20,11 +20,12 @@ CREATE OR REPLACE PACKAGE BODY p_zap_tall_col IS
         p_id_zapato   IN zap_tall_col.ID_ZAPATO%TYPE,
         p_talla       IN zap_tall_col.TALLA%TYPE,
         p_color       IN zap_tall_col.COLOR%TYPE,
+        p_sotck       IN zap_tall_col.STOCK%TYPE,
         p_min_stock   IN zap_tall_col.MIN_STOCK%TYPE,
         p_precio      IN zap_tall_col.PRECIO%TYPE
     )IS
     BEGIN
-        INSERT INTO ZAP_TALL_COL (ID_ZAPATO,TALLA,COLOR,MIN_STOCK,PRECIO) VALUES (p_id_zapato, p_talla, p_color,p_min_stock,p_precio);
+        INSERT INTO ZAP_TALL_COL (ID_ZAPATO,TALLA,COLOR,MIN_STOCK,PRECIO) VALUES (p_id_zapato, p_talla, p_color, p_sotck,p_min_stock,p_precio);
         COMMIT;
         dbms_output.put_line('Detalles del zapado no ' || ID_ZAPATO || ' creados correctamente');
     END create_zap_tall_col;
