@@ -1,6 +1,5 @@
 --Este script solo se puede ejecutar en administradores
 CREATE ROLE vendedor;
-CREATE ROLE administrador;
 
 
 --Permisos de rol vendedor en las tablas
