@@ -7,25 +7,25 @@ create or replace PACKAGE ZAPATOS_PACK AS
         material_n    zapatos.material%TYPE,
         material_suela_n zapatos.material_suela%TYPE  
     );
-    
+
     --cambia a inactivo el estado
     PROCEDURE eliminar_zapato(
         id_zap  zapatos.id_zapato%TYPE
     );
-    
+
     --cambia a activo el estado
      PROCEDURE activar_zapato(
         id_zap  zapatos.id_zapato%TYPE
     );
-    
+
     --editar tipo de zapato
     PROCEDURE editar_zapato(
         id_zap  zapatos.id_zapato%TYPE,
         nuevo_dato zapatos.tipo%TYPE,
         opcion  VARCHAR2
     );
-    
-    
+
+
 
 
 END ZAPATOS_PACK;
@@ -89,7 +89,7 @@ create or replace PACKAGE BODY zapatos_pack AS
         WHERE
             zapatos.id_zapato = id_zap;
 
-        dbms_output.put_line('El zapato con codigo'
+        dbms_output.put_line('El zapato con codigo '
                              || v_id
                              || ' se elimino con exito');
     EXCEPTION
@@ -163,7 +163,7 @@ create or replace PACKAGE BODY zapatos_pack AS
                 WHERE
                     id_zapato = id_zap;
 
-                dbms_output.put_line('Se actuaizo la marca para el zapato de codigo: ' || v_id);
+                dbms_output.put_line('Se actuaizo el modelo para el zapato de codigo: ' || v_id);
             WHEN 'MA' THEN
                 UPDATE zapatos
                 SET
@@ -171,7 +171,7 @@ create or replace PACKAGE BODY zapatos_pack AS
                 WHERE
                     id_zapato = id_zap;
 
-                dbms_output.put_line('Se actuaizo la marca para el zapato de codigo: ' || v_id);
+                dbms_output.put_line('Se actuaizo el material para el zapato de codigo: ' || v_id);
              WHEN 'MS' THEN
                 UPDATE zapatos
                 SET
@@ -179,9 +179,9 @@ create or replace PACKAGE BODY zapatos_pack AS
                 WHERE
                     id_zapato = id_zap;
 
-                dbms_output.put_line('Se actuaizo la marca para el zapato de codigo: ' || v_id);
+                dbms_output.put_line('Se actuaizo el material de la suela para el zapato de codigo: ' || v_id);
             ELSE
-                dbms_output.put_line('Sin valores');
+                dbms_output.put_line('Opcion de editar no encontrada');
         END CASE;
 
     EXCEPTION

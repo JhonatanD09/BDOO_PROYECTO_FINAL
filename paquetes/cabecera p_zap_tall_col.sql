@@ -1,6 +1,4 @@
--- Definici�n de cabeceras
--- Cabecera del paquete p_zap_tall_col
-CREATE OR REPLACE PACKAGE p_zap_tall_col IS
+create or replace PACKAGE p_zap_tall_col IS
 -- Se define un record para la busqueda 
     TYPE find_rec IS RECORD (
         marca       zapatos.MARCA%TYPE,
@@ -28,27 +26,35 @@ CREATE OR REPLACE PACKAGE p_zap_tall_col IS
 
     PROCEDURE update_zap_tall_col_stock (
         p_id_zapato   IN zap_tall_col.ID_ZAPATO%TYPE,
-        p_min_stock   IN zap_tall_col.MIN_STOCK%TYPE
+        p_stock   IN zap_tall_col.MIN_STOCK%TYPE
     );
     
+    PROCEDURE update_zap_tall_col_min_stock (
+        p_id_zapato   IN zap_tall_col.ID_ZAPATO%TYPE,
+        p_min_stock   IN zap_tall_col.MIN_STOCK%TYPE
+    );
     PROCEDURE update_zap_tall_col_price (
         p_id_zapato   IN zap_tall_col.ID_ZAPATO%TYPE,
-        p_precio      IN zap_tall_col.PRECIO%TYPEE
+        p_precio      IN zap_tall_col.PRECIO%TYPE
     );
 
     PROCEDURE delete_zap_tall_col (
         p_id_zapato   IN zap_tall_col.ID_ZAPATO%TYPE
     );
-    
+
     PROCEDURE  find(
        atribute   VARCHAR2,
-       typeOp      VaRCHAR2
+       typeOp      VARCHAR2
     );
-    
+
     PROCEDURE constult_stock;
 
-    PROCEDURE constult_stock_mark;
-    
-    PROCEDURE constult_stock_model;
-    
+    PROCEDURE constult_stock_mark(
+        p_marca   zapatos.marca%TYPE
+    );
+
+    PROCEDURE constult_stock_model(
+        p_modelo   zapatos.modelo%TYPE
+    );
+
 END p_zap_tall_col;
