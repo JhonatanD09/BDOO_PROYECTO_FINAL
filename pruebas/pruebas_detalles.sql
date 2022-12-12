@@ -16,7 +16,7 @@ END;
 --editar unidades
 
 BEGIN
-    detalles_pack.editar(5,5,6);
+    detalles_pack.editar(1,2,6);
 END;
 
 SELECT * FROM DETALLES;
@@ -24,7 +24,7 @@ SELECT * FROM DETALLES;
 --eliminar detalle
 
 BEGIN
-    detalles_pack.eliminar(5,5);
+    detalles_pack.eliminar(2,1);
 END;
 
 SELECT * FROM DETALLES;
