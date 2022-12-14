@@ -146,9 +146,12 @@ create or replace PACKAGE BODY p_facturas IS
     END consult_by_user_in_date;
     
     
+    --Consultar detalles de una factura
     PROCEDURE consult_details(
         p_id_factura facturas.id_factura%TYPE
     )IS
+
+    --Definicion de un record para almacenar la informacion necesaria del reporte
      TYPE find_rec IS RECORD (
         r_id_zapato zapatos.id_zapato%TYPE,
         r_marca    zapatos.marca%TYPE,
@@ -160,22 +163,28 @@ create or replace PACKAGE BODY p_facturas IS
         r_unidades detalles.unidades%TYPE,
         r_descuento detalles.descuento%TYPE
     );
-    
+    --Definicion de la coleccion a usar
       TYPE typ_nest_tab IS
         TABLE OF find_rec;
     v_count NUMBER :=1;
     
+    --Instancia de las variables anteriormente mencionada, ademas una para guardar el total de la factura
     v_find_rec  find_rec;
     v_nest_tab typ_nest_tab;
     v_total NUMBER;
     BEGIN
+    --Inicializacion de la coleccion
         v_nest_tab := typ_nest_tab();
+        --Se recorre para obntener los datos de la tabla detalles
                 FOR i in (SELECT id_zap_tall_col, unidades, descuento
                 FROM detalles WHERE id_factura = p_id_factura)LOOP
+                --Con el id de zap_tall_col se recompilan los datos de dicha tabla
                     FOR j in (SELECT id_zapato, talla, color, precio FROM zap_tall_col
                     WHERE id_zap_tall_col = i.id_zap_tall_col)LOOP
+                    --De zap_tall_col se toma el id_del zapato para buscar la informacion requerida de dicha tabla
                         FOR k in(SELECT marca, modelo FROM zapatos
                             WHERE id_zapato = j.id_zapato) LOOP
+                                --Se van almacenando los datos en el record
                                 v_find_rec.r_id_zapato := j.id_zapato;
                                 v_find_rec.r_marca := k.marca;
                                 v_find_rec.r_modelo := k.modelo;
@@ -184,6 +193,7 @@ create or replace PACKAGE BODY p_facturas IS
                                 v_find_rec.r_precio := j.precio;
                                 v_find_rec.r_unidades := i.unidades;
                                 v_find_rec.r_descuento := i.descuento;
+                                --Se guarda el record en la coleccion
                                 v_nest_tab.extend;
                                 v_nest_tab(v_count) := v_find_rec;
                                 v_count := v_count+1;
@@ -197,6 +207,7 @@ create or replace PACKAGE BODY p_facturas IS
                     IF v_nest_tab.COUNT = 0 THEN
                         dbms_output.put_line('No se encontraron detalles de la factura');
                     ELSE 
+                    --Se recorre la coleccion y se muestra el respectivo reporte
                         FOR i IN v_nest_tab.first..v_nest_tab.last LOOP
                             dbms_output.put_line(v_nest_tab(i).r_marca||' '|| v_nest_tab(i).r_modelo
                             ||' '||v_nest_tab(i).r_talla ||' '|| v_nest_tab(i).r_color
@@ -204,7 +215,7 @@ create or replace PACKAGE BODY p_facturas IS
                             ||' '|| v_nest_tab(i).r_descuento || '%');
                         END LOOP;
                     END IF;
-                    
+                    --Consulta para mostrar el total de la factura
                     SELECT total INTO v_total 
                     FROM facturas 
                     WHERE id_factura = p_id_factura;

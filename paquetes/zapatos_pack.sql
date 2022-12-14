@@ -35,6 +35,7 @@ END ZAPATOS_PACK;
 
 create or replace PACKAGE BODY zapatos_pack AS
 
+
     PROCEDURE agregar_zapato (
         marca_n  zapatos.marca%TYPE,
         modelo_n zapatos.modelo%TYPE,
@@ -45,6 +46,7 @@ create or replace PACKAGE BODY zapatos_pack AS
         v_id zapatos.id_zapato%TYPE;
     BEGIN
     
+    --Se valida medianet la consulta que el zapato exista
     SELECT id_zapato INTO v_id
     FROM zapatos
     WHERE marca = marca_n AND modelo = modelo_n
@@ -54,6 +56,7 @@ create or replace PACKAGE BODY zapatos_pack AS
     dbms_output.put_line('El zapato ya existe');
     
     EXCEPTION
+    --Si no existe, mediante la excepcion se controla la adicion de un nuevo elemento a la tabla
         WHEN no_data_found THEN
     
             INSERT INTO zapatos (MARCA, MODELO, TIPO,MATERIAL, MATERIAL_SUELA, ESTADO)
@@ -70,11 +73,15 @@ create or replace PACKAGE BODY zapatos_pack AS
             
     END agregar_zapato;
 
+
+--Cambia el estado de activo de un zapato
     PROCEDURE eliminar_zapato (
         id_zap zapatos.id_zapato%TYPE
     ) IS
         v_id zapatos.id_zapato%TYPE;
     BEGIN
+
+    --Se valida mediante la consulta su existencia
         SELECT
             id_zapato
         INTO v_id
@@ -82,7 +89,7 @@ create or replace PACKAGE BODY zapatos_pack AS
             zapatos
         WHERE
             id_zapato = id_zap;
-
+--Si la consulta trae resultados, se actuaiza el zapato a estado inactivo
         UPDATE zapatos
         SET
             estado = 'INACTIVO'
@@ -93,15 +100,19 @@ create or replace PACKAGE BODY zapatos_pack AS
                              || v_id
                              || ' se elimino con exito');
     EXCEPTION
+    --Si no se encuentra el registro se muestra un mensaje por pantalla
         WHEN no_data_found THEN
             dbms_output.put_line('No se encontro el zapato con codigo ' || id_zap);
     END eliminar_zapato;
 
+
+--Cambia el estado de inactivo de un zapato
     PROCEDURE activar_zapato (
         id_zap zapatos.id_zapato%TYPE
     ) IS
         v_id zapatos.id_zapato%TYPE;
     BEGIN
+    --Se valida mediante la consulta su existencia
         SELECT
             id_zapato
         INTO v_id
@@ -110,6 +121,7 @@ create or replace PACKAGE BODY zapatos_pack AS
         WHERE
             id_zapato = id_zap;
 
+--Si la consulta trae resultados, se actuaiza el zapato a estado activo
         UPDATE zapatos
         SET
             estado = 'ACTIVO'
@@ -119,11 +131,14 @@ create or replace PACKAGE BODY zapatos_pack AS
         dbms_output.put_line('El zapato con codigo '
                              || v_id
                              || ' se re ingreso con exito');
+ --Si no se encuentra el registro se muestra un mensaje por pantalla
     EXCEPTION
         WHEN no_data_found THEN
             dbms_output.put_line('No se encontro el zapato con codigo ' || id_zap);
     END activar_zapato;
 
+
+--Editar zapatos
     PROCEDURE editar_zapato (
         id_zap     zapatos.id_zapato%TYPE,
         nuevo_dato zapatos.tipo%TYPE,
@@ -131,6 +146,8 @@ create or replace PACKAGE BODY zapatos_pack AS
     ) IS
         v_id zapatos.id_zapato%TYPE;
     BEGIN
+
+      --Se valida mediante la consulta su existencia
         SELECT
             id_zapato
         INTO v_id
@@ -138,7 +155,7 @@ create or replace PACKAGE BODY zapatos_pack AS
             zapatos
         WHERE
             id_zapato = id_zap;
-
+--Dependiendo la opcion selecionada se procede a actualizar tipo, marca modelo, meterial, material suela
         CASE upper(opcion)
             WHEN 'T' THEN
                 UPDATE zapatos
@@ -183,7 +200,7 @@ create or replace PACKAGE BODY zapatos_pack AS
             ELSE
                 dbms_output.put_line('Opcion de editar no encontrada');
         END CASE;
-
+ --Si no se encuentra el registro se muestra un mensaje por pantalla
     EXCEPTION
         WHEN no_data_found THEN
             dbms_output.put_line('No se encontro el zapato con codigo ' || id_zap);

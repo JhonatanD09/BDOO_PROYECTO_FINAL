@@ -15,7 +15,7 @@ BEGIN
     zapatos_pack.agregar_zapato('Adidas', 'DB0284', 'Tennis', 'Lona', 'Goma');
 END;
 
---Eliminar zapato
+--Eliminar zapato (Cambiar estado)
 
 BEGIN
     zapatos_pack.eliminar_zapato(1);

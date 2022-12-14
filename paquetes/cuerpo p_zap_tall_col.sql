@@ -134,13 +134,13 @@ create or replace PACKAGE BODY p_zap_tall_col IS
 
 
     
-    
+    --Metodo de buscar 
     PROCEDURE  find(
        atribute   VARCHAR2,
        typeOp      VARCHAR2
     )
      IS
-    
+    --Deficion del record de guardar dicha informacion
        TYPE find_rec IS RECORD (
         r_id_zapato zapatos.id_zapato%TYPE,
         r_marca    zapatos.marca%TYPE,
@@ -154,18 +154,23 @@ create or replace PACKAGE BODY p_zap_tall_col IS
         r_stock    zap_tall_col.stock%TYPE,
         r_precio   zap_tall_col.precio%TYPE
     );
-    
+    --Definicion de la coleccion
       TYPE typ_nest_tab IS
         TABLE OF find_rec;
         
     
     v_count NUMBER :=1;
-    
+    --Instancia del record y la coleccion
     v_find_rec  find_rec;
     v_nest_tab typ_nest_tab;
     
     BEGIN
-       CASE upper(typeOp)
+    --Dependiedo del tipo de opcion se realiza:
+        --Se recorre la tabla zapatos,se toman los datos necesaarios
+        --y de alli se toma el id de zapato para hacer el join con la tabla zap_tall_col
+        --y se extraen los datos, se almacenan en el record y luuego dentro de la coleccion
+        --Por ultimo se recorre la coleccion y se muestran los registros guardados dentro de la misma
+       CASE upper(typeOp) 
                     WHEN 'M' THEN
                             v_nest_tab := typ_nest_tab();
                            FOR i in (SELECT id_zapato, marca, modelo, tipo, material, material_suela, estado 
