@@ -1,6 +1,6 @@
-ejecutar creabas
+ejecutar crebas
 ejecutar pks
 ejecutar paquetes (zapatos- zap-tall-col, facturas, detalles)
 ejecutar triggers
 EJECUTAR PRUEBAS:
-	-AGREGAR (zapatos, zap_tall_col, facturas, detalles)
+	-zapatos, zap_tall_col, facturas, detalles

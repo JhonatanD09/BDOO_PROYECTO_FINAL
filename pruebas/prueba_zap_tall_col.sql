@@ -35,7 +35,7 @@ SELECT * FROM zap_tall_col WHERE id_zap_tall_col = 4;
 
 --Eliminar registro
 BEGIN
-    p_zap_tall_col.delete_zap_tall_col(4);
+    p_zap_tall_col.delete_zap_tall_col(1);
 END;
 
 --Consultar stock por modelo
